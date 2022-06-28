@@ -297,3 +297,35 @@ implementing a transfer learning strategy.
 
 As our next step, we want to explore more strategies to achieve a better
 result (mm segmentation or weakly-supervised learning strategy).
+
+References
+==========
+
+[1] Liang-Chieh Chen, George Papandreou, Iasonas Kokkinos,
+Kevin Murphy, and Alan L Yuille. Deeplab: Semantic image
+segmentation with deep convolutional nets, atrous convolution, and fully connected crfs. IEEE transactions on pattern
+analysis and machine intelligence, 40(4):834–848, 2017. 
+[2] Sergey Ioffe and Christian Szegedy. Batch normalization:
+Accelerating deep network training by reducing internal covariate shift. In International conference on machine learning, pages 448–456. PMLR, 2015. 
+[3] Jonathan Long, Evan Shelhamer, and Trevor Darrell. Fully
+convolutional networks for semantic segmentation. In Proceedings of the IEEE conference on computer vision and pattern recognition, pages 3431–3440, 2015. 
+[4] Adam Paszke, Abhishek Chaurasia, Sangpil Kim, and Eugenio Culurciello. Enet: A deep neural network architecture for real-time semantic segmentation. arXiv preprint
+arXiv:1606.02147, 2016. 
+[5] Olaf Ronneberger, Philipp Fischer, and Thomas Brox. Unet: Convolutional networks for biomedical image segmentation. In International Conference on Medical image computing and computer-assisted intervention, pages 234–241.
+Springer, 2015. 
+[6] Tete Xiao, Yingcheng Liu, Bolei Zhou, Yuning Jiang, and
+Jian Sun. Unified perceptual parsing for scene understanding. In Proceedings of the European conference on computer
+vision (ECCV), pages 418–434, 2018. 
+[7] Zhi Yang, Wei Yu, Pengwei Liang, Hanqi Guo, Likun Xia,
+Feng Zhang, Yong Ma, and Jiayi Ma. Deep transfer learning
+for military object recognition under small training set condition. Neural Computing and Applications, 31(10):6469–
+6478, 2019. 
+[8] Kaichao You, Mingsheng Long, Jianmin Wang, and
+Michael I Jordan. How does learning rate decay help modern
+neural networks? arXiv preprint arXiv:1908.01878, 2019. 
+[9] Yongjun Zhang and Xia Chen. Lightweight semantic segmentation algorithm based on mobilenetv3 network. In 2020
+International Conference on Intelligent Computing, Automation and Systems (ICICAS), pages 429–433, 2020. 
+[10] Hengshuang Zhao, Jianping Shi, Xiaojuan Qi, Xiaogang
+Wang, and Jiaya Jia. Pyramid scene parsing network. In
+Proceedings of the IEEE conference on computer vision and
+pattern recognition, pages 2881–2890, 2017. 
