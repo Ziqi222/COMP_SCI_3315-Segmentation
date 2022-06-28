@@ -1,4 +1,9 @@
-Introduction {#sec:intro}
+Abstract
+============
+
+   Semantic segmentation requires a high number of pixel-level annotations to learn and train accurate models. This paper reports the progress on improving the mIoU and Flops based on a small training dataset. Using several model structures and optimizing strategies, this report gives a summary and analysis on deep learning by describing and observing the characteristics of different approaches based on the experiment results. The report firstly introduces the concept and performance of baseline model, and then reviews the performance by modifying the training parameters and hidden layers based on baseline model. Secondly, the report records the performances on U-Net, FCN and other convolutional neural networks by combining several backbones. Thirdly, a higher performance solution is given by using transfer learning. Finally, the visualization result is summarized, limitation and challenges are discussed. The entire experiment results can be viewed through this link.
+
+1.Introduction 
 ============
 
 The convolutional neural network (CNN) architectures are the most common
@@ -12,7 +17,7 @@ calls all of the layers that defined in the constructor. The
 understanding of each layer type's definition and usage is discussed
 below:
 
-Convolutional layer
+1.1 Convolutional layer
 -------------------
 
 Convolutional layers consist a group of filters, referred as kernels,
@@ -22,7 +27,7 @@ applied. In the baseline model, a 2D convolutional layer has been
 applied on a signal input using multiple input planes with a square
 kernel size, equal padding and stride.
 
-ReLU layer
+1.2 ReLU layer
 ----------
 
 ReLU layer is one of the most common choices for hidden layers, as it is
@@ -31,7 +36,7 @@ needed to run the neural network would rise exponentially. The
 computational cost of adding more ReLUs rises linearly as the CNN's size
 scales.
 
-Pooling layer
+1.3 Pooling layer
 -------------
 
 The pooling layer decreases the spatial dimension, which facilitates
@@ -48,7 +53,7 @@ In order to minimize the size of the input before it is fed into a fully
 connected layer, pooling layers are often utilised after convolutional
 layers.
 
-Dropout layer
+1.4 Dropout layer
 -------------
 
 To avoid overfitting, the dropout layer randomly converts input units to
@@ -56,7 +61,7 @@ To avoid overfitting, the dropout layer randomly converts input units to
 indicates a 2D feature map). Each single channel will be separately
 zeroed out on every forwards call with a certain probability.
 
-Improvement based on baseline model {#sec:improving process}
+2.Improvement based on baseline model
 ===================================
 
 We have tested modifications on various parameters and the hidden layers
@@ -150,14 +155,14 @@ same time, we achieve the highest mIoU. As the next step, we move on to
 test different networks and involve ablation studies to pick the best
 performing backbone for each network.
 
-Improvement based on several networks {#sec:progress2}
+3.Improvement based on several networks 
 =====================================
 
 The following discussion is focusing on the testing results with
 different networks and backbones. We mainly focus on ResNet as our
 backbone as there are enough sources online though GitHub.
 
-FCN
+3.1 FCN
 ---
 
 The baseline model uses convolutional networks with fully connected
@@ -179,7 +184,7 @@ this combination reaches an obvious improvement, which up to 0.41 in
 mIoU. However, the computational cost is a bit large, which is around 6
 times to the original.
 
-U-Net
+3.2 U-Net
 -----
 
 In the paper \"U-Net: CNNs for Biomedical Image Segmentation\", in
@@ -213,7 +218,7 @@ cost.
   : Overview on different networks with several backbones.
 :::
 
-UPerNet
+3.3 UPerNet
 -------
 
 Consider convolution makes the visible field of view of the network
@@ -235,7 +240,7 @@ by combining ResNet50 with UPerNet, which achieves a higher mIoU.
 Comparing with FCN's and U-Net's computational cost, it is more Flops,
 but still around 5 times larger than the baseline model.
 
-DeepLabV3
+3.4 DeepLabV3
 ---------
 
 While searching for a better solution, we find that the method in the
@@ -256,7 +261,7 @@ comparing the Flops values, DeepLabV3 + MobileNetV3 Large is very
 efficient, which is 4 times smaller than the original baseline. We will
 discuss the computational cost more in detail below.
 
-Overview on mIoU
+3.5 Overview on mIoU
 ----------------
 
 From [4](#tab:t4){reference-type="ref" reference="tab:t4"}, we observe
@@ -298,7 +303,7 @@ important and essential.
   : Ablation Study. DeepLabV3 network with ResNet101 as backbone.
 :::
 
-Overview on Flops
+3.6 Overview on Flops
 -----------------
 
 ::: {#tab:t6}
@@ -344,7 +349,7 @@ transfer learning strategy on the DeepLabV3Plus + ResNet101 model, we
 achieve a higher mIoU and lower Flops (only 286.90G). More details will
 be covered in the flowing session.
 
-Implementation - transfer learning {#sec:code implementation}
+4.Implementation - transfer learning
 ==================================
 
 ![A graph of the loss curve according to
@@ -366,7 +371,7 @@ large bump which affects the rest of loss values and the final mIoU
 result. In the case, if we adjust the learning rate appropriately, we
 might achieve a even higher mIoU in total.
 
-Visualization results {#sec:results}
+5.Visualization results
 =====================
 
 The fully visualization results has been uploaded, it is visible through
@@ -381,7 +386,7 @@ also segmented according to the outlines.
 DeepLabV3Plus+ResNet101 (from left to
 right).](latex/img/Picture4.png){#fig:pic4 width="\\linewidth"}
 
-Conclusion {#sec:conclusion}
+6.Conclusion
 ==========
 
 We have met several limitations during the entire process:
