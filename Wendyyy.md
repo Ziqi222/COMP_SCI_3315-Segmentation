@@ -72,55 +72,24 @@ Table 1 summarizes the mIoU results by only modifying one type of
 parameter or hidden layer each time. From the table, we can clearly see
 that the optimizer Adam performs much better than SGD.
 
-::: {#tab:t1}
-  Modification     mIoU
-  --------------- ------
-  Optimizer       
-  Adam             0.28
-  SGD              0.02
-  Learning rate   
-  3e-4             0.28
-  3e-3             0.05
-  3e-5             0.18
-  1e-4             0.24
-  Batch size      
-  4                0.28
-  16               0.25
-  32               0.21
-  Epochs          
-  180              0.28
-  500              0.28
-  1000             0.30
-  Hidden layer    
-  BatchNorm2d      0.29
-  Conv2d           0.29
-
-  : Testing on several parameter values.
-:::
+![WechatIMG21](https://user-images.githubusercontent.com/64782437/176138110-ea7e69c4-0bf8-40e5-a5cc-10e342e864b7.jpeg)
 
 For learning rates, we have tested a range of values between 1.0 and
 1e-6. A strategy called step-wise decay has been applied to modify the
 learning rate during training. We design this strategy to lower the
 learning rate according to a predetermined rate, then decay the rate by
 a number of percentage after each certain size of epochs.
-[1](#fig:pic1){reference-type="ref" reference="fig:pic1"} shows the
-changes of learning rate by using step-wise decay method. By using this
+Figure1 shows the changes of learning rate by using step-wise decay method. By using this
 strategy, it helps the model to be converged faster and might improve
 the mIoU when if meet the right rate.
-[2](#fig:pic2){reference-type="ref" reference="fig:pic2"} shows the
-result of using step-wise decay method to find the decent learning
-rate[@you2019does].
+Figure2 shows the result of using step-wise decay method to find the decent learning
+rate[1].
 
-![Learning rate decays each 10
-epochs.](latex/img/Picture1.png){#fig:pic1 width="\\linewidth"}
+![image](https://user-images.githubusercontent.com/64782437/176140763-fc73ab4c-44b2-4741-87b7-da98942c276d.png)
+![image](https://user-images.githubusercontent.com/64782437/176140815-7ea86b9a-7d6a-4b6a-8dc3-eff2fbdab336.png)
 
-![A comparison between decaying the learning rate and a decent learning
-rate.](latex/img/Picture2.png){#fig:pic2 width="\\linewidth"}
-
-From [1](#tab:t1){reference-type="ref" reference="tab:t1"}, we observe
-that increase the batch size does not bring that much difference on the
-final results. Moreover, enlarge the number of epochs can improve the
-final mIoU within a small range.
+From Table1, we observe that increase the batch size does not bring that much difference on the
+final results. Moreover, enlarge the number of epochs can improve the final mIoU within a small range.
 
 Besides of the small changes above, we also modify the hidden layers by
 adding Batch Normalization and more convolutional layers. In certain
@@ -129,26 +98,17 @@ and enables us to employ considerably greater learning rates and less
 cautious initialisation. According to the paper results, when apply on a
 cutting-edge image classification model, Batch Normalization outperforms
 the original model by a wide margin and obtains the same mIoU with 14
-times smaller training steps[@ioffe2015batch]. Therefore, we insert the
+times smaller training steps[2]. Therefore, we insert the
 functions between convolutional layers and pooling layers. As we can see
 from Table1, the mIoU has been improved a bit more compare with other
 modification results. Then, we add more convolutional layers and switch
 the positions, but it does not perform as well as Batch Normalization.
 
-::: {#tab:t2}
-  Increase batch   Conv2d   BatchNorm2d   mIoU
-  ---------------- -------- ------------- ------
-  N                N        Y             0.29
-  N                Y        Y             0.32
-  Y                N        Y             0.32
-  Y                Y        Y             0.33
-
-  : Ablation study. 3 approaches to improve baseline mIoU.
-:::
+![image](https://user-images.githubusercontent.com/64782437/176140959-02afc9ac-1f56-4421-89c2-a509256053c7.png)
 
 After testing and observing the results by applying small changes on
 baseline model, we decide to keep using Adam as the optimizer.
-[2](#tab:t2){reference-type="ref" reference="tab:t2"} shows our best
+Table2 shows our best
 mIoU achievements using ablation studies. We find that when increase the
 batch size, add Batch Normalization and more convolutional layers at the
 same time, we achieve the highest mIoU. As the next step, we move on to
@@ -171,7 +131,7 @@ segmentation, we need to input the original image of any size, and the
 final output is changed from a category to a category for each pixel of
 the whole image. The answer to this problem is given in the paper
 \"Fully Convolutional Networks for Semantic
-Segmentation\"[@long2015fully]. By involving the fully-connected layer,
+Segmentation\"[3]. By involving the fully-connected layer,
 the input to the network will accept arbitrary sizes and the convolution
 will result in a probability map. Finally, solving the problem that the
 size of the image after convolution is smaller than the original one,
@@ -189,34 +149,18 @@ times to the original.
 
 In the paper \"U-Net: CNNs for Biomedical Image Segmentation\", in
 addition to the down-sampling and up-sampling processes mentioned in
-FCN, U-Net introduces the \"copy and crop\"[@ronneberger2015u]. This
+FCN, U-Net introduces the \"copy and crop\"[4]. This
 solves the problem of information loss in the downsampling process in
 FCN, which further improves the mIoU of segmentation.
 
 According to the analysis above, we have implemented and tested the
 U-Net performance based on ResNet18 and ResNet101 backbones separately.
-From [3](#tab:t3){reference-type="ref" reference="tab:t3"}, we can see
+From Table3, we can see
 that U-Net + ResNet101 has a higher mIoU but also a larger computational
 cost.
 
-::: {#tab:t3}
-  Network         Backbone             mIoU   Flops
-  --------------- -------------------- ------ ---------
-  Baseline        /                    0.28   132.85G
-  ENet            /                    0.32   6.64G
-  UNet            ResNet18             0.31   615.83G
-  UNet            ResNet101            0.33   767.33G
-  FCN             ResNet50             0.40   530.28G
-  FCN             ResNet101            0.41   808.52G
-  UperNet         ResNet50             0.43   662.16G
-  UperNet         ResNet101            0.39   752.64G
-  DeepLabV3       ResNet50             0.44   620.55G
-  DeepLabV3       ResNet101            0.46   898.79G
-  DeepLabV3       MobileNet V3 Large   0.34   35.85G
-  DeepLabV3Plus   ResNet101            0.50   286.90G
+ ![image](https://user-images.githubusercontent.com/64782437/176141421-97d8489d-b295-40c5-9958-ff98a3531a86.png)
 
-  : Overview on different networks with several backbones.
-:::
 
 3.3 UPerNet
 -------
@@ -224,21 +168,19 @@ cost.
 Consider convolution makes the visible field of view of the network
 small, the paper \"Pyramid Scene Parsing Network\" gives a multi-scale
 pooling solution, which allows us to obtain more contextual information
-and thus improve the segmentation mIoU[@zhao2017pyramid]. We have tried
+and thus improve the segmentation mIoU[5]. We have tried
 several ways to apply the PSPNet by training our data, but we could not
 successfully develop and load this network. After searching on more
 deliverable networks, in paper "Unified Perceptual Parsing for Scene
 Understanding", we find a new network approach called UPerNet which is
 built up based on the Feature Pyramid Network (FPN) and PSPNet. The
 authors apply a Pyramid Pooling Module (PPM) from PSPNet on the final
-layer of the backbone network[@xiao2018unified]. Empirically, they
+layer of the backbone network[6]. Empirically, they
 discover that the PPM, by offering useful global prior representations,
 is extremely compatible with the FPN design.
 
-[3](#tab:t3){reference-type="ref" reference="tab:t3"} shows the outputs
-by combining ResNet50 with UPerNet, which achieves a higher mIoU.
-Comparing with FCN's and U-Net's computational cost, it is more Flops,
-but still around 5 times larger than the baseline model.
+Table3 shows the outputs by combining ResNet50 with UPerNet, which achieves a higher mIoU.
+Comparing with FCN's and U-Net's computational cost, it is more Flops, but still around 5 times larger than the baseline model.
 
 3.4 DeepLabV3
 ---------
@@ -246,101 +188,55 @@ but still around 5 times larger than the baseline model.
 While searching for a better solution, we find that the method in the
 DeepLab paper has been reproduced by many people. By looking up the
 problems solved of using DeepLab network, we discover that DeepLab can
-fix the problem of downsampling with null convolution[@chen2017deeplab].
+fix the problem of downsampling with null convolution[7].
 It also solves the limitation of blurred predicted images as the
 conditional random fields of view to capture context using multiscale
 null convolution (ASPP module). From paper "Lightweight semantic
 segmentation algorithm based on MobileNetV3 network", we find
 MobileNetV3 network is a very efficient approach. Therefore, we have
 tested the results by using ResNet and also MobileNetV3 as backbone on
-DeepLabV3 model[@9402816].
+DeepLabV3 model[8].
 
-From [3](#tab:t3){reference-type="ref" reference="tab:t3"}, the highest
-mIoU is using DeepLabV3 + ResNet101, which is 0.46. However, by
-comparing the Flops values, DeepLabV3 + MobileNetV3 Large is very
-efficient, which is 4 times smaller than the original baseline. We will
-discuss the computational cost more in detail below.
+From Table3, the highest mIoU is using DeepLabV3 + ResNet101, which is 0.46. However, by
+comparing the Flops values, DeepLabV3 + MobileNetV3 Large is very efficient, which is 4 times smaller than the original baseline. We will discuss the computational cost more in detail below.
 
 3.5 Overview on mIoU
 ----------------
 
-From [4](#tab:t4){reference-type="ref" reference="tab:t4"}, we observe
+From Table4, we observe
 that DeepLabV3 + ResNet101 has the best performance in mIoU. Therefore,
 we have involved with ablation study on this model as the testing
-results showing in [5](#tab:t5){reference-type="ref"
-reference="tab:t5"}. In conclusion, increasing the number of epochs to a
+results showing in Table5. In conclusion, increasing the number of epochs to a
 large amount will not always lead a good result. In order to increase
 the performance of a model, a correct learning rate is much more
 important and essential.
 
-::: {#tab:t4}
-  Network         Backbone             mIoU
-  --------------- -------------------- ------
-  Baseline        /                    0.28
-  UNet            ResNet18             0.31
-  ENet            /                    0.32
-  UNet            ResNet101            0.33
-  DeepLabV3       MobileNet V3 Large   0.34
-  UPerNet         ResNet101            0.39
-  FCN             ResNet50             0.40
-  FCN             ResNet101            0.41
-  UPerNet         ResNet50             0.43
-  DeepLabV3       ResNet50             0.44
-  DeepLabV3       ResNet101            0.46
-  DeepLabV3Plus   ResNet101            0.50
+![image](https://user-images.githubusercontent.com/64782437/176141772-26745151-131c-4280-beea-bdd3566bc340.png)
 
-  : Network mIoU. mIoU comparison in the ascending order.
-:::
+![image](https://user-images.githubusercontent.com/64782437/176141852-9cbb3113-ad56-4513-b2b5-9e51d19377f2.png)
 
-::: {#tab:t5}
-  Adjust learning rate   Increase epochs   Backbone   mIoU      
-  ---------------------- ----------------- ---------- ------ -- --
-  N                      N                 Y          0.43      
-  N                      Y                 Y          0.42      
-  Y                      N                 Y          0.46      
-  Y                      Y                 Y          0.40      
-
-  : Ablation Study. DeepLabV3 network with ResNet101 as backbone.
-:::
 
 3.6 Overview on Flops
 -----------------
 
-::: {#tab:t6}
-  Network         Backbone             Flops
-  --------------- -------------------- ---------
-  ENet            /                    6.64G
-  DeepLabV3       MobileNet V3 Large   35.85G
-  Baseline        /                    132.85G
-  DeepLabV3Plus   ResNet101            286.90G
-  FCN             ResNet50             530.28G
-  UNet            ResNet18             615.83G
-  DeepLabV3       ResNet50             620.55G
-  UPerNet         ResNet50             662.16G
-  UPerNet         ResNet101            752.64G
-  UNet            ResNet101            767.33G
-  FCN             ResNet101            808.52G
-  DeepLabV3       ResNet101            898.79G
+![image](https://user-images.githubusercontent.com/64782437/176141907-3e2e9ee7-b1d1-42d3-9177-136b48337bbc.png)
 
-  : Network Flops. Flops comparison in the ascending order.
-:::
 
 In order to improve the total model's Flops, we have tried to modify the
-backbone. From [6](#tab:t6){reference-type="ref" reference="tab:t6"},
+backbone. From Table6,
 using MobileNetV3 Large as a backbone has decreased the Flops to only
 35.85G, which is 4 times smaller than the baseline. The other approach
 we have discovered is ENet which is developed based on the SegNet as a
 baseline. By analyzing the results from paper - "ENet: A Deep Neural
 Network Architecture for Real-Time Semantic Segmentation", ENet has
 fewer parameters and cheaper in computation time cost than other
-networks[@paszke2016enet]. [6](#tab:t6){reference-type="ref"
-reference="tab:t6"} shows the entire networks' Flops in an ascending
+networks[9]. Table6 shows the entire networks' Flops in an ascending
 order. ENet is the fastest one with only 6.64G in Flops.
 
 Moreover, by reading "Deep transfer learning for military object
 recognition under small training set condition" this paper, we got some
 hints to use pretrained models which have been trained on a large
-dataset[@yang2019deep]. This technique called transfer learning. The key
+dataset[10]. This technique called transfer learning. The key
 advantages of transfer learning are resource conservation and increased
 effectiveness while developing new models. Since the majority of the
 model will have already been trained, it can also aid when only
@@ -351,10 +247,9 @@ be covered in the flowing session.
 
 4.Implementation - transfer learning
 ==================================
+![image](https://user-images.githubusercontent.com/64782437/176142123-3b123f91-05ab-4707-86e6-39e3695fb2a0.png)
 
-![A graph of the loss curve according to
 epochs.](latex/img/Picture3.png){#fig:pic3 width="\\linewidth"}
-
 After observing the above testing result, we pick the DeepLabV3Plus +
 ResNet101 as our final model architecture. As we have observed our
 dataset with several dataset, Cityscapes dataset is highly matched. It
@@ -365,7 +260,7 @@ choose a pretrained model which is trained on the Cityscapes dataset.
 In our implementation, we have downloaded the model path file and load
 it. Then we define a CNN as our baseline.
 
-From [3](#fig:pic3){reference-type="ref" reference="fig:pic3"} we can
+From Figure3 we can
 clearly see that when compute around 125 epochs, the loss curve has a
 large bump which affects the rest of loss values and the final mIoU
 result. In the case, if we adjust the learning rate appropriately, we
@@ -375,16 +270,12 @@ might achieve a even higher mIoU in total.
 =====================
 
 The fully visualization results has been uploaded, it is visible through
-this
-[link](https://drive.google.com/drive/folders/1-XCCT6df10bgXP7mcUvbMbLsS9FoHdKM?usp=sharing).
-In [4](#fig:pic4){reference-type="ref" reference="fig:pic4"}, we only
+this link. In Figure4, we only
 pick 3 visualization images. By comparing the results, in final model
 (right hand side), the objects' edges are more clear and each region is
 also segmented according to the outlines.
 
-![Segmentation results on U-Net, DeepLabV3+ResNet101,
-DeepLabV3Plus+ResNet101 (from left to
-right).](latex/img/Picture4.png){#fig:pic4 width="\\linewidth"}
+![image](https://user-images.githubusercontent.com/64782437/176142332-8d908aac-a5ea-474a-9c3d-2984575da19c.png)
 
 6.Conclusion
 ==========
